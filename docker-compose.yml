@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+    PS:
+        image: prestashop/prestashop:1.7-7.3
+        container_name: ${NOMBRE_PROYECTO}_ps
+        volumes:
+            - ./data:/var/www/html
+        ports:
+            - "8099:80"
+        restart: on-failure
+        env_file: .env
+        environment:
+            - DB_SERVER=$DB:8906
+            - DB_USER=$MYSQL_USER
+            - DB_PASSWD=$MYSQL_PASSWORD
+            - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+            - DB_NAME=$NOMBRE_PROYECTO
+            - DB_PREFIX=$PREFIJO
+            - PS_LANGUAGE='es'
+            - PS_COUNTRY='ES
+    DB:
+        image: mysql:5.7
+        container_name: ${NOMBRE_PROYECTO}_db
+        volumes:
+            - ./db:/var/lib/mysql
+        ports:
+            - "8906:3306"
+        restart: on-failure
+        env_file: .env
+        environment:
+            - MYSQL_DATABASE=${NOMBRE_PROYECTO}
+
